@@ -10,6 +10,8 @@ const AuthForm = () => {
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
+    emailRef.current.value = '';
+        passwordRef.current.value = '';
   };
 
   const submitHandler = (event) => {
@@ -18,11 +20,15 @@ const AuthForm = () => {
 
     const enteredEmail = emailRef.current.value;
     const enteredPassword = passwordRef.current.value;
-
-    if (isLogin) {
-      const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=
+  let url
+    if (!isLogin)
+      {
+        url=`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBs_bJk9daTBYGVyxklTixePrZp-DwrL9w`
+      } 
+      else {
+       url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=
 AIzaSyBs_bJk9daTBYGVyxklTixePrZp-DwrL9w`;
-  
+      }
       fetch(url, {
         method: 'POST',
         headers: {
@@ -52,14 +58,16 @@ AIzaSyBs_bJk9daTBYGVyxklTixePrZp-DwrL9w`;
         .then((data) => {
           const token = data.idToken;
           console.log('Token:', token);
-          alert('Login successfully');
+          emailRef.current.value = '';
+          passwordRef.current.value = '';
+          alert(isLogin?'Login successfully':"Account Created successfully");
         })
         .catch((error) => {
           setIsLoading(false);
           alert(error.message);
         });
     }
-  };
+  
 
   return (
     <section className={classes.auth}>
@@ -90,6 +98,6 @@ AIzaSyBs_bJk9daTBYGVyxklTixePrZp-DwrL9w`;
       </form>
     </section>
   );
-};
+}
 
 export default AuthForm;
