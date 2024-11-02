@@ -1,5 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState,} from 'react';
+
+import {useNavigate} from "react-router-dom"
 
 export const AuthContext = React.createContext({
   token: '',
@@ -9,6 +11,8 @@ export const AuthContext = React.createContext({
 });
 
  const AuthProvider = ({ children }) => {
+
+  const navigate=useNavigate()
   const initialToken = localStorage.getItem('token');
   const [token, setToken] = useState(initialToken);
 
@@ -17,11 +21,13 @@ export const AuthContext = React.createContext({
   const loginHandler = (token) => {
     setToken(token);
     localStorage.setItem('token', token);
+    navigate('/profile');
   };
 
   const logoutHandler = () => {
     setToken(null);
     localStorage.removeItem('token');
+    navigate('/auth')
   };
 
   const contextValue = {
