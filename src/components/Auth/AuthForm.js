@@ -19,35 +19,47 @@ const AuthForm = () => {
     const enteredEmail = emailRef.current.value;
     const enteredPassword = passwordRef.current.value;
 
-    if(!isLogin)
-    {
-
-    }
-    else{
-          const url= `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBs_bJk9daTBYGVyxklTixePrZp-DwrL9w`;
-    
-          fetch(url, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email: enteredEmail,
-              password: enteredPassword,
-              returnSecureToken: true,
-            }),
-          }).then((res) => {
-            setIsLoading(false);
-            if (res.ok) {
-              alert('login successfully')
-            }
-        }).catch(() => {
+    if (isLogin) {
+      const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=
+AIzaSyBs_bJk9daTBYGVyxklTixePrZp-DwrL9w`;
+  
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: enteredEmail,
+          password: enteredPassword,
+          returnSecureToken: true,
+        }),
+      })
+        .then((res) => {
           setIsLoading(false);
-          alert("failed. Try once again");
-        });   
-      
+          if (res.ok) {
+            return res.json();
+          } else {
+        
+            return res.json().then((data) => {
+              let errorMessage = 'Authentication failed!';
+              if (data && data.error && data.error.message) {
+                errorMessage = data.error.message;
+              }
+              throw new Error(errorMessage);
+            });
+          }
+        })
+        .then((data) => {
+          const token = data.idToken;
+          console.log('Token:', token);
+          alert('Login successfully');
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          alert(error.message);
+        });
+    }
   };
-}
 
   return (
     <section className={classes.auth}>
