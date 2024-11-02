@@ -1,9 +1,13 @@
-import { useState, useRef } from 'react';
+import { useState, useRef ,useContext} from 'react';
 import classes from './AuthForm.module.css';
+import { AuthContext } from '../../store/AuthProvider';
 
 const AuthForm = () => {
+
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+
+  const ctx=useContext(AuthContext)
 
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -20,7 +24,7 @@ const AuthForm = () => {
 
     const enteredEmail = emailRef.current.value;
     const enteredPassword = passwordRef.current.value;
-  let url
+    let url
     if (!isLogin)
       {
         url=`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBs_bJk9daTBYGVyxklTixePrZp-DwrL9w`
@@ -60,7 +64,16 @@ AIzaSyBs_bJk9daTBYGVyxklTixePrZp-DwrL9w`;
           console.log('Token:', token);
           emailRef.current.value = '';
           passwordRef.current.value = '';
-          alert(isLogin?'Login successfully':"Account Created successfully");
+          if(isLogin)
+          {
+            alert('login Successfully')
+            ctx.login(token)
+          }
+          else{
+           alert(" Account Created successfully")
+          }
+       
+          
         })
         .catch((error) => {
           setIsLoading(false);

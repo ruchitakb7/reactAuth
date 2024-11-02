@@ -5,8 +5,11 @@ import UserProfile from './components/Profile/UserProfile';
 import AuthPage from './pages/AuthPage';
 import HomePage from './pages/HomePage';
 
+import AuthProvider from './store/AuthProvider';
+
 function App() {
   return (
+    <AuthProvider>
     <Layout>
       <Switch>
         <Route path='/' exact>
@@ -20,6 +23,7 @@ function App() {
         </Route>
       </Switch>
     </Layout>
+    </AuthProvider>
   );
 }
 
