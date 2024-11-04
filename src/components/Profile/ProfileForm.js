@@ -8,6 +8,7 @@ const ProfileForm = () => {
 
   const newPasswordRef = useRef();
   const ctx = useContext(AuthContext);
+  console.log(ctx.isLoggedIn)
   const navigate=useNavigate()
 
   const changePassword = (event) => {

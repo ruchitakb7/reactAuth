@@ -11,6 +11,7 @@ export const AuthContext = React.createContext({
 });
 
  const AuthProvider = ({ children }) => {
+  //const [userIsLoggedIn,setloggedIn]=useState(false)
 
   const navigate=useNavigate()
   const initialToken = localStorage.getItem('token');
@@ -21,12 +22,14 @@ export const AuthContext = React.createContext({
   const loginHandler = (token) => {
     setToken(token);
     localStorage.setItem('token', token);
+   // setloggedIn(true)
     navigate('/profile');
   };
 
   const logoutHandler = () => {
     setToken(null);
     localStorage.removeItem('token');
+   // setloggedIn(false)
     navigate('/auth')
   };
 
